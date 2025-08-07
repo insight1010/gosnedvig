@@ -686,6 +686,84 @@
                 padding: 0 10px;
             }
         }
+
+        /* Success Notification */
+        .success-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            z-index: 1000;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .success-notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .success-notification .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #10b981;
+        }
+
+        .success-notification h3 {
+            color: #1f2937;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .success-notification p {
+            color: #6b7280;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .success-notification .ok-button {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .success-notification .ok-button:hover {
+            background: #2563eb;
+        }
+
+        .notification-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .notification-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
     </style>
 </head>
 <body>
@@ -906,6 +984,15 @@
         </div>
     </footer>
 
+    <!-- Success Notification -->
+    <div class="notification-overlay" id="notificationOverlay"></div>
+    <div class="success-notification" id="successNotification">
+        <div class="icon">✅</div>
+        <h3>Спасибо за заявку!</h3>
+        <p>Мы свяжемся с вами в течение 5 минут.</p>
+        <button class="ok-button" onclick="hideNotification()">Понятно</button>
+    </div>
+
     <script>
         // Calculator functionality
         document.getElementById('nmck').addEventListener('input', calculateProfit);
@@ -945,9 +1032,30 @@
         // Form submission
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Спасибо за заявку! Мы свяжемся с вами в течение 5 минут.');
+            showNotification();
             this.reset();
         });
+
+        // Show notification
+        function showNotification() {
+            const overlay = document.getElementById('notificationOverlay');
+            const notification = document.getElementById('successNotification');
+            
+            overlay.classList.add('show');
+            notification.classList.add('show');
+        }
+
+        // Hide notification
+        function hideNotification() {
+            const overlay = document.getElementById('notificationOverlay');
+            const notification = document.getElementById('successNotification');
+            
+            overlay.classList.remove('show');
+            notification.classList.remove('show');
+        }
+
+        // Hide notification when clicking on overlay
+        document.getElementById('notificationOverlay').addEventListener('click', hideNotification);
 
         // Smooth scrolling
         document.querySelector('a[href="#calculator"]').addEventListener('click', function(e) {
